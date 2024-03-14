@@ -211,6 +211,25 @@ class Exporter:
 
         # Input
         im = torch.zeros(self.args.batch, 3, *self.imgsz).to(self.device)
+
+        from torchvision import transforms
+        from PIL import Image
+
+        # Load the image
+        image_path = "bus.jpg"  # Replace with the actual path to your image
+        image = Image.open(image_path)
+
+        # Define the transformation (resize and convert to tensor)
+        transform = transforms.Compose([
+            transforms.Resize((640, 640)),  # Resize to 640x640
+            transforms.ToTensor(),          # Convert to PyTorch tensor
+        ])
+
+        # Apply the transformation
+        im = transform(image).unsqueeze(0)
+
+        # Print the shape of the tensor (channels, height, width)
+        
         file = Path(
             getattr(model, "pt_path", None) or getattr(model, "yaml_file", None) or model.yaml.get("yaml_file", "")
         )

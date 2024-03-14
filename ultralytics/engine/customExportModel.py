@@ -16,8 +16,7 @@ class ExportModel(nn.Module):
     preds = ops.non_max_suppression(
             preds
         )
-    print(preds)
-    return preds[0]
+    return preds
 
   def fuse(self): 
     self.model = self.model.fuse()
