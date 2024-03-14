@@ -13,7 +13,6 @@ from ultralytics.hub.utils import HUB_WEB_ROOT
 from ultralytics.nn.tasks import attempt_load_one_weight, guess_model_task, nn, yaml_model_load
 from ultralytics.utils import ASSETS, DEFAULT_CFG_DICT, LOGGER, RANK, SETTINGS, callbacks, checks, emojis, yaml_load
 
-
 class Model(nn.Module):
     """
     A base class for implementing YOLO models, unifying APIs across different model types.
@@ -582,10 +581,13 @@ class Model(nn.Module):
         """
         self._check_is_pytorch_model()
         from .exporter import Exporter
+        from ultralytics.engine.customExportModel import ExportModel
+
 
         custom = {"imgsz": self.model.args["imgsz"], "batch": 1, "data": None, "verbose": False}  # method defaults
         args = {**self.overrides, **custom, **kwargs, "mode": "export"}  # highest priority args on the right
-        return Exporter(overrides=args, _callbacks=self.callbacks)(model=self.model)
+        customModel = ExportModel(self.model)
+        return Exporter(overrides=args, _callbacks=self.callbacks)(model=customModel)
 
     def train(
         self,
